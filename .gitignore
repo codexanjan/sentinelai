@@ -1,0 +1,12 @@
+**/build/
+**/.gradle/
+**/.kotlin/
+**/.idea/
+**/.vercel/
+**/.openai/
+**/local.properties
+*.jks
+*.p12
+*.keystore
+.env*
+**/downloads/*.apk

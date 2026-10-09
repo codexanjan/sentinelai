@@ -1,0 +1,1 @@
+try{await import('./app.js?v=040');}catch{const status=document.getElementById('intro-status');if(status){status.textContent='Reconnect to open the web vault. Your saved vault is unchanged.';const retry=document.createElement('button');retry.textContent='Try again';retry.onclick=()=>location.reload();document.querySelector('.intro-actions').append(retry);}}
