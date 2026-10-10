@@ -43,6 +43,10 @@ Codes work without a connection once their setup keys are on the device. The web
 
 Want to explore before enrolling an account? Choose **Try demo**. Use only the public demo accounts there; add personal accounts in your own local vault.
 
+## Landing-page motion
+
+The feature strip scrolls continuously; the hero card floats gently, its shield orbits, and sections reveal as you scroll. Use the pause button beside the strip to stop looping effects. The page honors your device’s reduced-motion setting and pauses loops in hidden tabs. These effects use lightweight CSS and a small local module; code generation and vault timers are unchanged.
+
 ## Faster first screen
 
 The old waiting card has been replaced with an immediate, lightweight intro. QR, account SDK and Argon2 libraries are loaded only when their features are needed. The demo uses an ephemeral random encryption key, without deriving a password key. Real vaults and backups retain Argon2id (64 MiB, three iterations) and AES-GCM; encryption was not weakened to speed up startup. Android initializes device storage away from the UI thread and shows its intro immediately.
