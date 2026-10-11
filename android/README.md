@@ -57,6 +57,6 @@ This implementation needs independent security review, physical-device/OEM testi
 
 ## Version 0.5.0
 
-Google and verified email/password login connect to Firebase Authentication. Native Google sign-in uses Credential Manager and the registered release signing certificate. Public project/app options and the web OAuth client ID are in `app/src/main/assets/auth-config.json`; Firebase is initialized programmatically. A debug build needs its own SHA certificate registered to use Google sign-in.
+Google and verified email/password login connect to Firebase Authentication. Native Google sign-in uses Credential Manager and the registered release signing certificate. `app/src/main/assets/auth-config.json` contains an empty template. Fill the project/app options and web OAuth client ID in a private build copy; Firebase is initialized programmatically. A debug build needs its own SHA certificate registered to use Google sign-in.
 
 Email signup sends a verification link; unverified accounts cannot enter the account vault. Password resets use Firebase's hosted email action page. Apple sign-in still requires provider credentials. Account sessions are managed by the Firebase SDK in private app storage. OTP secrets remain in separate local Keystore-protected vaults, and signing in never decrypts or syncs them. Local vaults and the public read-only demo remain available. See the repository's `docs/AUTH_SETUP.md` and `docs/VALIDATION_0.5.0.md` for verification limits.

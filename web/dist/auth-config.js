@@ -1,1 +1,1 @@
-export const authConfig={"firebase":{"apiKey":"","projectId":"your-firebase-project","appId":"","authDomain":"your-firebase-project.firebaseapp.com"},"googleEnabled":true,"appleEnabled":false};
+export const authConfig={firebase:{apiKey:"",projectId:"",appId:"",authDomain:""},googleEnabled:false,appleEnabled:false};

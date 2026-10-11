@@ -1,10 +1,10 @@
 {
-  "googleEnabled": true,
+  "googleEnabled": false,
   "appleEnabled": false,
   "googleWebClientId": "",
   "firebase": {
     "appId": "",
-    "projectId": "your-firebase-project",
+    "projectId": "",
     "apiKey": ""
   }
 }

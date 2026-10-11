@@ -133,7 +133,7 @@ Use localhost or HTTPS. The existing Vercel deployment serves `web/dist` as stat
 
 ## Authentication and privacy
 
-Local vaults require no account. **Google and verified email/password login are connected to Firebase.** Use Continue with Google, or create an email account and open its verification link. Forgot password sends a hosted reset email. Apple sign-in still needs Apple developer credentials. Account login opens a separate local vault; it does not unlock or cloud-sync OTP secrets. See [authentication setup](docs/AUTH_SETUP.md) and [security model](docs/SECURITY_MODEL.md).
+Local vaults require no account. **The published app connects Google and verified email/password login to Firebase.** The repository contains empty configuration templates; source builds require your own Firebase project setup. Use Continue with Google, or create an email account and open its verification link. Forgot password sends a hosted reset email. Apple sign-in still needs Apple developer credentials. Account login opens a separate local vault; it does not unlock or cloud-sync OTP secrets. See [authentication setup](docs/AUTH_SETUP.md) and [security model](docs/SECURITY_MODEL.md).
 
 Firebase authentication tests are included in [web/tests](web/tests). They use a local emulator and public test identities; they do not create production accounts.
 

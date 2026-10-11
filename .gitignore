@@ -12,3 +12,6 @@
 **/downloads/*.apk
 **/node_modules/
 **/*-debug.log
+**/*firebase*.local.json
+**/service-account*.json
+**/google-services.json
