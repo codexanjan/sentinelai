@@ -6,6 +6,8 @@ Web: AES-GCM browser vault protected by a separate vault password, with Argon2id
 
 Portable backups retain SENTINEL-BACKUP-1, AES-GCM, fresh salt/nonce and Argon2id. They preserve standard accounts/setup keys and exclude organization/checklist/drill history. Test a restore and service sign-in before deleting an original vault. Account password resets do not decrypt vaults. Clearing browser data or uninstalling can destroy local accounts.
 
-Limitations: no cloud sync, passkeys, phishing-resistant authentication or administrator recovery. Real email/social login is pending provider configuration. Clipboard history, rooted devices and compromised browsers/OS remain outside these protections. Recovery readiness is a self-recorded checklist. Pending fresh copy is cancelled by locking/backgrounding; no code should be written later from a locked session.
+Firebase Authentication handles Google and verified email/password accounts. Web account sessions use session persistence; Android account sessions are managed by Firebase in private app storage. Account identity selects a separate local vault namespace; it does not unlock or upload OTP setup keys. Android Google login uses Credential Manager and the registered release signing certificate. Public SDK keys identify the project and are not administrator secrets.
+
+Limitations: no cloud sync, passkeys, phishing-resistant authentication or administrator recovery. Apple sign-in still requires provider configuration. Clipboard history, rooted devices and compromised browsers/OS remain outside these protections. Recovery readiness is a self-recorded checklist. Pending fresh copy is cancelled by locking/backgrounding; no code should be written later from a locked session.
 
 Signing key/password, OAuth provider secrets and all real user vaults are excluded from the repository. The release is a development-signed beta, not an independent security certification.

@@ -1,0 +1,5 @@
+Firebase JavaScript SDK 13.0.0
+firebase-app-compat.js and firebase-auth-compat.js
+Copyright Google LLC and Firebase SDK contributors.
+Licensed under Apache License 2.0; see firebase-LICENSE.txt.
+Official source: https://github.com/firebase/firebase-js-sdk

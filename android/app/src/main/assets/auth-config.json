@@ -1,1 +1,10 @@
-{"url":"","publishableKey":"","googleEnabled":false,"appleEnabled":false}
+{
+  "googleEnabled": true,
+  "appleEnabled": false,
+  "googleWebClientId": "",
+  "firebase": {
+    "appId": "",
+    "projectId": "your-firebase-project",
+    "apiKey": ""
+  }
+}

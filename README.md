@@ -2,7 +2,7 @@
 
 **Your codes. Your rules.** A native Android authenticator and a responsive web vault, built around local control and practical recovery.
 
-[Download Android 0.4.0 beta](https://github.com/codexanjan/sentinelai/releases/tag/v0.4.0) · [Open web app](https://sentinel-authenticator.vercel.app) · [Release notes](docs/RELEASE_0.4.0.md)
+[Download Android 0.5.0 beta](https://github.com/codexanjan/sentinelai/releases/tag/v0.5.0) · [Open web app](https://sentinel-authenticator.vercel.app) · [Release notes](docs/RELEASE_0.5.0.md)
 
 **Start here:** [How it works](#how-it-works) · [Photo walkthrough](#photo-walkthrough) · [Install Android](#install-the-apk) · [Try the demo](#demo)
 
@@ -22,6 +22,7 @@
 | Create/rename/remove empty folders | Folder names are edited per account | Yes |
 | Device credential / strong biometric unlock | Yes | Separate vault password |
 | Password-encrypted portable backup | Yes | Yes |
+| Google and verified email login | Firebase + Credential Manager | Firebase + Google popup |
 | Public demo using RFC test keys | Read-only, clears on background | Isolated in memory |
 
 Recovery drills are self-recorded checklists. They do not verify a service login or recovery codes. Focus mode controls what is displayed; it is not an additional encryption boundary. Clipboard access can be denied by the browser, in which case you can read the displayed code.
@@ -53,7 +54,7 @@ The old waiting card has been replaced with an immediate, lightweight intro. QR,
 
 ## Install the APK
 
-1. Download `SentinelAuthenticator-0.4.0.apk` and its SHA256 file from Releases.
+1. Download `SentinelAuthenticator-0.5.0.apk` and its SHA256 file from Releases.
 2. Use Android 11 or newer. Allow your browser/file manager to install this APK when prompted.
 3. Keep the existing app installed when upgrading so local data remains in place. This release uses the same package and signing key as previous Sentinel builds.
 4. Choose **Open my vault**. Set a secure device PIN/password if requested, then unlock. Or choose **Try demo** without adding real secrets.
@@ -68,6 +69,12 @@ Web demo: `demo@sentinel.example` / `SentinelDemo123!`, or use **Try demo**. And
 ## Photo walkthrough
 
 These are actual Android and web screenshots using public demo accounts. The landing page contains an illustrative account preview. No personal setup keys appear in these images. Click an image to view it at full size.
+
+### Account sign-in
+
+Continue with Google, or create an email account and verify it before signing in. Your account login and your vault password are separate. Local mode and demo remain available.
+
+<a href="docs/screenshots/web-signin-mobile.png"><img src="docs/screenshots/web-signin-mobile.png" alt="Sentinel mobile sign-in with Google, email and demo" width="310" /></a> <a href="docs/screenshots/web-signup-mobile.png"><img src="docs/screenshots/web-signup-mobile.png" alt="Sentinel mobile email signup with verification" width="310" /></a>
 
 ### 1. Meet Sentinel
 
@@ -103,7 +110,7 @@ Locate the service's recovery codes, check your encrypted backup and test a norm
 
 ![Recovery drill on web](docs/screenshots/web-recovery-drill.png)
 
-[Browse all screenshots](docs/screenshots) · [Download release screenshots](https://github.com/codexanjan/sentinelai/releases/download/v0.4.0/SentinelAuthenticator-0.4.0-screenshots.zip) (original eight release images; this README also includes the newer manual-entry photo)
+[Browse all screenshots](docs/screenshots) · [Download release screenshots](https://github.com/codexanjan/sentinelai/releases/download/v0.5.0/SentinelAuthenticator-0.5.0-screenshots.zip) (public demo walkthrough and account screens)
 
 ## Build from source
 
@@ -126,13 +133,15 @@ Use localhost or HTTPS. The existing Vercel deployment serves `web/dist` as stat
 
 ## Authentication and privacy
 
-Local vaults require no account. Email/Google/Apple integration and screens are present, but real login is **not enabled** until a backend and provider credentials are configured. There is no cloud sync in this edition. See [authentication setup](docs/AUTH_SETUP.md) and [security model](docs/SECURITY_MODEL.md).
+Local vaults require no account. **Google and verified email/password login are connected to Firebase.** Use Continue with Google, or create an email account and open its verification link. Forgot password sends a hosted reset email. Apple sign-in still needs Apple developer credentials. Account login opens a separate local vault; it does not unlock or cloud-sync OTP secrets. See [authentication setup](docs/AUTH_SETUP.md) and [security model](docs/SECURITY_MODEL.md).
+
+Firebase authentication tests are included in [web/tests](web/tests). They use a local emulator and public test identities; they do not create production accounts.
 
 No ads, analytics or AI processing of OTP secrets. `INTERNET` is used for optional account login; codes are generated locally. Never commit service-role keys, OAuth secrets, vaults or real QR/setup keys.
 
 ## Status and validation
 
-This is a **beta**, signed with the existing local development release key. Core correctness and browser workflows are tested; comprehensive physical-device, accessibility and independent security review are still pending. Exact results and limits are in [validation](docs/VALIDATION_0.4.0.md).
+This is a **beta**, signed with the existing local development release key. Core correctness and browser workflows are tested; comprehensive physical-device, accessibility and independent security review are still pending. Exact results and limits are in [validation](docs/VALIDATION_0.5.0.md).
 
 The product documents in `docs/01_*` through `docs/07_*` are the original plans, not a statement that every planned feature is implemented. Current implemented behavior is described here and in the release notes.
 

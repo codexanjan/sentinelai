@@ -1,0 +1,10 @@
+{
+  "name": "sentinel-auth-tests",
+  "private": true,
+  "scripts": {
+    "test": "cd ../.. && node web/tests/firebase-auth.cjs && node web/tests/firebase-ui.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

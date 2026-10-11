@@ -10,3 +10,5 @@
 *.keystore
 .env*
 **/downloads/*.apk
+**/node_modules/
+**/*-debug.log

@@ -60,7 +60,7 @@ import kotlinx.coroutines.launch
             }
         }
         TextButton(onClick={activity.continueLocal()},modifier=Modifier.fillMaxWidth()) { Text("Continue with a local vault") }
-        if(!activity.accountLogin.configured)Text("Real account login is awaiting your Supabase connection. Demo and local vault work now.",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+        if(!activity.accountLogin.configured)Text("Firebase account setup is unavailable. Demo and local vault work now.",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.height(24.dp))
     }
 }

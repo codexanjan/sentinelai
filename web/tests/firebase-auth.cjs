@@ -1,0 +1,50 @@
+const {chromium}=require('playwright');
+const assert=require('node:assert/strict');
+(async()=>{
+ const browser=await chromium.launch({headless:true});
+ try{
+  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage();
+  await page.route('**/auth-config.js',r=>r.fulfill({contentType:'text/javascript',body:'export const authConfig={firebase:{},googleEnabled:false,appleEnabled:false};'}));
+  await page.goto('http://127.0.0.1:4186/#signin');
+  await page.addScriptTag({url:'http://127.0.0.1:4186/vendor/firebase-app-compat.js'});
+  await page.addScriptTag({url:'http://127.0.0.1:4186/vendor/firebase-auth-compat.js'});
+  const email='email-'+Date.now()+'@example.test',password='TestOnlyPassword123!';
+  await page.evaluate(async()=>{
+   const config={apiKey:'test-emulator-key',projectId:'demo-sentinel-auth',appId:'1:123:web:abc',authDomain:'demo-sentinel-auth.firebaseapp.com'};
+   window.fixtureAuth=firebase.initializeApp(config,'sentinel-account').auth();
+   fixtureAuth.useEmulator('http://127.0.0.1:9099',{disableWarnings:true});
+   window.fixtureClient=await (await import('./firebase-adapter.js')).createFirebaseAuth(config);
+  });
+  assert.equal(await page.evaluate(async()=> (await fixtureClient.auth.getUser()).data.user),null);
+  const signup=await page.evaluate(async({email,password})=>{const r=await fixtureClient.auth.signUp({email,password,options:{data:{display_name:'Local test'}}});return {error:r.error?.message,session:r.data.session,signedIn:!!fixtureAuth.currentUser};},{email,password});
+  assert.equal(signup.error,undefined);assert.equal(signup.session,null);assert.equal(signup.signedIn,false);
+  const unverified=await page.evaluate(async({email,password})=>(await fixtureClient.auth.signInWithPassword({email,password})).error?.message,{email,password});
+  assert.match(unverified,/Confirm your email/);
+  let codes=await (await fetch('http://127.0.0.1:9099/emulator/v1/projects/demo-sentinel-auth/oobCodes')).json();
+  const verify=codes.oobCodes.find(x=>x.email===email&&x.requestType==='VERIFY_EMAIL');assert.ok(verify);
+  await page.evaluate(code=>fixtureAuth.applyActionCode(code),verify.oobCode);
+  const identity=await page.evaluate(async({email,password})=>{const r=await fixtureClient.auth.signInWithPassword({email,password});return {error:r.error?.message,user:r.data.user};},{email,password});
+  assert.equal(identity.error,undefined);assert.equal(identity.user.email,email);assert.ok(identity.user.id);
+  const bad=await page.evaluate(async({email})=>(await fixtureClient.auth.signInWithPassword({email,password:'WrongPassword123!'})).error?.message,{email});assert.equal(bad,'Email or password is incorrect.');
+  await page.evaluate(()=>fixtureClient.auth.signOut());
+  const reset=await page.evaluate(async email=>(await fixtureClient.auth.resetPasswordForEmail(email)).error?.message,email);assert.equal(reset,undefined);
+  codes=await (await fetch('http://127.0.0.1:9099/emulator/v1/projects/demo-sentinel-auth/oobCodes')).json();
+  const recovery=codes.oobCodes.find(x=>x.email===email&&x.requestType==='PASSWORD_RESET');assert.ok(recovery);
+  await page.evaluate(code=>fixtureAuth.confirmPasswordReset(code,'ResetOnlyPassword123!'),recovery.oobCode);
+  assert.equal(await page.evaluate(async email=>(await fixtureClient.auth.signInWithPassword({email,password:'ResetOnlyPassword123!'})).data.user.email,email),email);
+  await page.evaluate(()=>fixtureClient.auth.signOut());
+  const popupEvent=page.waitForEvent('popup');
+  const googleResult=page.evaluate(()=>fixtureClient.auth.signInWithOAuth({provider:'google'}).then(r=>({error:r.error?.message,user:r.data.user})));
+  const popup=await popupEvent;await popup.waitForLoadState('domcontentloaded');
+  console.log('Google test popup:',await popup.locator('body').innerText());
+  const add=popup.getByText('Add new account',{exact:false});if(await add.count())await add.click();
+  console.log('Google test form:',await popup.locator('body').innerText());
+  await popup.getByLabel('Email', {exact:false}).fill('google-'+Date.now()+'@example.test');
+  const name=popup.getByLabel('Display name',{exact:false});if(await name.count())await name.fill('Google emulator user');
+  await popup.getByRole('button',{name:/Sign in/}).click();
+  const google=await googleResult;assert.equal(google.error,undefined);assert.match(google.user.email,/^google-/);
+  await page.evaluate(()=>fixtureClient.auth.signOut());
+  assert.equal(await page.evaluate(async()=>(await fixtureClient.auth.getUser()).data.user),null);
+  console.log('Firebase emulator passed: verification, email login, invalid password, reset, Google popup, UID mapping and sign-out. Real Google OAuth remains unverified.');
+ }finally{await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});
